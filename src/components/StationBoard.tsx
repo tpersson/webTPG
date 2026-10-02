@@ -1,6 +1,7 @@
 import { useCallback, useEffect, useRef, useState } from 'react'
 import { departures, shortName, type Departure, type Station } from '../api'
 import { useI18n } from '../i18n'
+import { lineColor } from '../lineColors'
 import { Skeleton } from './SearchTab'
 import { RefreshIcon } from './NearbyTab'
 
@@ -108,7 +109,7 @@ export default function StationBoard({ station, onBack }: Props) {
             const mins = Math.floor((d.time - now) / 60_000)
             return (
               <li key={d.key} className="row dep">
-                <span className={`badge ${d.kind}`} title={t(d.kind)}>
+                <span className={`badge ${d.kind}`} style={lineColor(d.line)} title={t(d.kind)}>
                   {d.line}
                 </span>
                 <span className="dest">

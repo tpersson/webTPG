@@ -9,6 +9,17 @@ A small, minimalist web app that shows live tram and bus departures for stops in
   (realtime delays included when available). The board refreshes every 30 seconds.
 - English / French toggle, light and dark mode, mobile-first layout.
 
+## Line colours
+
+Badges use the official TPG line colours from [tpg.ch/fr/lignes](https://www.tpg.ch/fr/lignes), stored in
+`src/lineColors.json`. Refresh them (e.g. after the yearly timetable change) with:
+
+```sh
+npm run colors
+```
+
+Lines not on that list fall back to a neutral tram/bus style.
+
 ## Run locally
 
 ```sh

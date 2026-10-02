@@ -84,7 +84,7 @@ export default function StationBoard({ station, onBack }: Props) {
         </button>
         <div className="board-title">
           <h1>{short}</h1>
-          {short !== station.name && <p>{station.name.slice(0, station.name.length - short.length).replace(/,\s*$/, '')}</p>}
+          {short.toLowerCase() !== station.name.toLowerCase() && <p>{station.name.slice(0, station.name.length - short.length).replace(/,\s*$/, '')}</p>}
         </div>
         <button className="icon-btn refresh" onClick={load} disabled={loading} aria-label={t('refresh')}>
           <RefreshIcon spinning={loading} />

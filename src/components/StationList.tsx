@@ -16,7 +16,7 @@ export default function StationList({ stations, onOpen }: Props) {
             <button className="row station-row" onClick={() => onOpen(s)}>
               <span className="station-text">
                 <span className="station-name">{short}</span>
-                {short !== s.name && <span className="station-sub">{s.name.slice(0, s.name.length - short.length).replace(/,\s*$/, '')}</span>}
+                {short.toLowerCase() !== s.name.toLowerCase() && <span className="station-sub">{s.name.slice(0, s.name.length - short.length).replace(/,\s*$/, '')}</span>}
               </span>
               {s.distance != null && <span className="distance">{formatDistance(s.distance)}</span>}
               <Chevron />

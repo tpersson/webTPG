@@ -31,6 +31,7 @@ interface RawStation {
   name: string | null
   coordinate?: { x: number | null; y: number | null } | null
   distance?: number | null
+  icon?: string | null
 }
 
 interface RawJourney {
@@ -64,7 +65,9 @@ async function getJSON<T>(path: string, signal?: AbortSignal): Promise<T> {
 }
 
 function toStation(r: RawStation): Station | null {
-  if (!r.id || !r.name) return null
+  // Entries without an id are addresses/POIs; "train" icons are rail-only
+  // stations (e.g. Léman Express) that never have tram or bus departures.
+  if (!r.id || !r.name || r.icon === 'train' || r.icon === 'ship') return null
   return {
     id: r.id,
     name: r.name,
@@ -181,5 +184,6 @@ function haversine(lat1: number, lon1: number, lat2: number, lon2: number): numb
 
 /** "Genève, Plainpalais" -> "Plainpalais"; other towns keep their prefix. */
 export function shortName(name: string): string {
-  return name.replace(/^Gen[eè]ve,\s*/i, '')
+  const short = name.replace(/^Gen[eè]ve,\s*/i, '')
+  return short.charAt(0).toUpperCase() + short.slice(1)
 }

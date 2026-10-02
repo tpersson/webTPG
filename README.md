@@ -27,7 +27,7 @@ The build is fully static (relative paths), so `dist/` can be served from any st
 
 ## Deploy
 
-`.github/workflows/pages.yml` builds and deploys to GitHub Pages on every push to `main`.
+`.github/workflows/pages.yml` builds and deploys to GitHub Pages on every push to `main` (and the current default branch).
 Enable it once under **Settings → Pages → Source: GitHub Actions**.
 
 Note: "Near me" needs the page to be served over HTTPS (or `localhost`) for the browser to allow location access.

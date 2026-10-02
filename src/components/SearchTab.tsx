@@ -12,7 +12,7 @@ interface Props {
 type State =
   | { status: 'idle' }
   | { status: 'loading' }
-  | { status: 'done'; results: Station[] }
+  | { status: 'done'; results: Station[]; stale?: boolean }
   | { status: 'error' }
 
 export default function SearchTab({ onOpen, active }: Props) {
@@ -35,7 +35,8 @@ export default function SearchTab({ onOpen, active }: Props) {
       return
     }
     const ctrl = new AbortController()
-    setState((s) => (s.status === 'done' ? s : { status: 'loading' }))
+    // Keep previous results on screen (dimmed) instead of flashing a skeleton.
+    setState((s) => (s.status === 'done' ? { ...s, stale: true } : { status: 'loading' }))
     const timer = setTimeout(() => {
       searchStations(q, ctrl.signal)
         .then((results) => setState({ status: 'done', results }))
@@ -72,7 +73,7 @@ export default function SearchTab({ onOpen, active }: Props) {
           value={query}
           onChange={(e) => setQuery(e.target.value)}
           onKeyDown={(e) => {
-            if (e.key === 'Enter' && state.status === 'done' && state.results[0]) onOpen(state.results[0])
+            if (e.key === 'Enter' && state.status === 'done' && !state.stale && state.results[0]) onOpen(state.results[0])
           }}
         />
         {query && (
@@ -117,9 +118,11 @@ export default function SearchTab({ onOpen, active }: Props) {
           <button className="btn" onClick={() => setAttempt((n) => n + 1)}>{t('retry')}</button>
         </div>
       ) : state.status === 'done' && state.results.length === 0 ? (
-        <p className="hint">{t('noResults')}</p>
+        <p className={`hint ${state.stale ? 'stale' : ''}`}>{t('noResults')}</p>
       ) : state.status === 'done' ? (
-        <StationList stations={state.results} onOpen={onOpen} />
+        <div className={state.stale ? 'stale' : ''}>
+          <StationList stations={state.results} onOpen={onOpen} />
+        </div>
       ) : null}
     </section>
   )
